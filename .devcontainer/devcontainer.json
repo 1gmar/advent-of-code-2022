@@ -1,0 +1,22 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/java
+{
+    "name": "Java",
+    "image": "mcr.microsoft.com/devcontainers/java:17",
+    "features": {
+        "ghcr.io/devcontainers/features/java:1": {
+            "version": "none",
+            "installMaven": "false",
+            "installGradle": "false"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "flix.flix",
+                "streetsidesoftware.code-spell-checker",
+                "mhutchie.git-graph"
+            ]
+        }
+    }
+}
