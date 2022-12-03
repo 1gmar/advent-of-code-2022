@@ -1,4 +1,4 @@
-namespace Day1 
+namespace Day1
 {
     pub def solutionPart1(input: String): Int32 =
         input
