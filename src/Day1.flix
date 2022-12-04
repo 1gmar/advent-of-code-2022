@@ -1,12 +1,5 @@
 namespace Day1
 {
-    pub def solutionPart1(input: String): Int32 =
-        input
-        |> readCaloryLines
-        |> List.map(sumElfCalories)
-        |> List.maximum
-        |> Option.getWithDefault(0)
-
     def readCaloryLines(input: String): List[List[String]] =
         input
         |> String.splitOn({substr = "\n\n"})
@@ -17,6 +10,13 @@ namespace Day1
         |> List.flatMap(x -> Result.toList(Int32.parse(10, x)))
         |> List.sum
 
+    pub def solutionPart1(input: String): Int32 =
+        input
+        |> readCaloryLines
+        |> List.map(sumElfCalories)
+        |> List.maximum
+        |> Option.getWithDefault(0)
+    
     pub def solutionPart2(input: String): Int32 =
         input
         |> readCaloryLines
