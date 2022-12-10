@@ -11,21 +11,20 @@ namespace Day3
 
     def toPriority(itemType: Char): Int32 =
         let itemTypeIntCode = Char.toInt32(itemType);
-        if (Char.isUpperCase(itemType)) itemTypeIntCode - 38
-        else itemTypeIntCode - 96
+        if (Char.isUpperCase(itemType)) itemTypeIntCode - 38 else itemTypeIntCode - 96
     
     def groupBy3(rucksacks: List[String]): List[(String, String, String)] =
         def fillGroups(list: List[String], accumulator: List[(String, String, String)]): List[(String, String, String)] = match list
         {
             case x :: y :: z :: _ => fillGroups(List.drop(3, list), (x, y, z) :: accumulator)
-            case _                      => accumulator
+            case _                => accumulator
         };
         fillGroups(rucksacks, Nil)
 
     def findBadge(groupRucksacks: (String, String, String)): List[Char] =
         let toSet = String.toList >> List.toSet;
         let (fstRucksack, sndRucksack, thirdRucksack) = groupRucksacks;
-        let badge = Set.intersection(toSet(fstRucksack), toSet(sndRucksack)) |> Set.intersection(toSet(thirdRucksack));
+        let badge = toSet(fstRucksack) `Set.intersection` toSet(sndRucksack) |> Set.intersection(toSet(thirdRucksack));
         Set.toList(badge)
 
     pub def solutionPart1(input: String): Int32 =
