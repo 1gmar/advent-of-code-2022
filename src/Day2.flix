@@ -110,14 +110,14 @@ namespace Day2
     
     pub def solutionPart1(input: String): Int32 = 
         input
-        |> String.splitOn({substr = "\n"})
+        |> String.lines
         |> List.map(parseRound >> Option.map(playRound) >> Option.map(computeScore))
         |> List.flatMap(Option.toList)
         |> List.sum
     
     pub def solutionPart2(input: String): Int32 =
         input
-        |> String.splitOn({substr = "\n"})
+        |> String.lines
         |> List.map(parseStrat >> Option.flatMap(playStrat) >> Option.map(computeScore))
         |> List.flatMap(Option.toList)
         |> List.sum

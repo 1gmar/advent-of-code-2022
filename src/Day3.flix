@@ -29,13 +29,13 @@ namespace Day3
 
     pub def solutionPart1(input: String): Int32 =
         input
-        |> String.splitOn({substr = "\n"})
+        |> String.lines
         |> List.flatMap(splitRucksackContent >> findCommonItemTypes >> List.map(toPriority))
         |> List.sum
 
     pub def solutionPart2(input: String): Int32 =
         input
-        |> String.splitOn({substr = "\n"})
+        |> String.lines
         |> groupBy3
         |> List.flatMap(findBadge >> List.map(toPriority))
         |> List.sum

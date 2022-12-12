@@ -3,7 +3,7 @@ namespace Day1
     def readCaloryLines(input: String): List[List[String]] =
         input
         |> String.splitOn({substr = "\n\n"})
-        |> List.map(String.splitOn({substr = "\n"}))
+        |> List.map(String.lines)
 
     def sumElfCalories(calories: List[String]): Int32 =
         calories 

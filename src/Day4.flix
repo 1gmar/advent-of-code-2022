@@ -34,13 +34,13 @@ namespace Day4
 
     pub def solutionPart1(input: String): Int32 =
         input
-        |> String.splitOn({substr = "\n"})
+        |> String.lines
         |> List.flatMap(toAssignmentPair >> Option.toList)
         |> List.count(fullyOverlappingRanges)
 
     pub def solutionPart2(input: String): Int32 =
         input
-        |> String.splitOn({substr = "\n"})
+        |> String.lines
         |> List.flatMap(toAssignmentPair >> Option.toList)
         |> List.count(overlappingRanges)
 }
