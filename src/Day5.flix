@@ -45,17 +45,17 @@ namespace Day5
         case stacks :: movements :: Nil => parseCrateStacks(stacks) |> Option.map(s -> (s, parseMovements(movements)))
         case _                          => None
     }
-
-    def runRearrangement(moveStrategy: (CrateStack, CrateStack) -> CrateStack, crateStacks: CrateStacks, instruction: MoveInstruction): CrateStacks =
-        let moveQuantity = instruction.move;
-        let movedCrates = Map.get(instruction.from, crateStacks) |> Option.toList |> List.flatMap(List.take(moveQuantity));
-        crateStacks
-        |> Map.adjust(List.drop(moveQuantity), instruction.from)
-        |> Map.adjust(stack -> moveStrategy(stack, movedCrates), instruction.to)
     
     def runRearrengements(moveStrategy: (CrateStack, CrateStack) -> CrateStack, craneProgram: CraneProgram): CrateStacks = 
+        def runRearrangement(crateStacks, instruction) = (
+            let moveQuantity = instruction.move;
+            let movedCrates = Map.get(instruction.from, crateStacks) |> Option.toList |> List.flatMap(List.take(moveQuantity));
+            crateStacks
+            |> Map.adjust(List.drop(moveQuantity), instruction.from)
+            |> Map.adjust(stack -> moveStrategy(stack, movedCrates), instruction.to)
+        );
         let (crateStacks, moveInstructions) = craneProgram;
-        List.foldLeft(runRearrangement(moveStrategy), crateStacks, moveInstructions)
+        List.foldLeft(runRearrangement, crateStacks, moveInstructions)
 
     def peekTopCrates(crateStacks: CrateStacks): Option[String] =
         Map.toList(crateStacks) 

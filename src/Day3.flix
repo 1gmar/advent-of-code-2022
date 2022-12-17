@@ -14,7 +14,7 @@ namespace Day3
         if (Char.isUpperCase(itemType)) itemTypeIntCode - 38 else itemTypeIntCode - 96
     
     def groupBy3(rucksacks: List[String]): List[(String, String, String)] =
-        def fillGroups(list: List[String], accumulator: List[(String, String, String)]): List[(String, String, String)] = match list
+        def fillGroups(list, accumulator) = match list
         {
             case x :: y :: z :: _ => fillGroups(List.drop(3, list), (x, y, z) :: accumulator)
             case _                => accumulator
