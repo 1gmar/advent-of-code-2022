@@ -1,4 +1,4 @@
-pub class Score[a]
+sealed class Score[a]
 {
     pub def score(it: a): Int32
 }
