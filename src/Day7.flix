@@ -3,7 +3,9 @@ namespace Day7
     use Bool.{not};
     use List.{drop, dropWhile, filter, find, foldRight, length, map, sort, sum, takeWhile};
     use String.{startsWith, words};
-    
+    use FSItem.{File, Directory}
+    use FSCrumb.FSCrumb
+
     type alias Name = String
     type alias Size = Int32
     enum FSItem
@@ -80,10 +82,9 @@ namespace Day7
         );
         def loop(lines, zipper) = match lines
         {
-            case line :: ls if startsWith({prefix = "$"}, line) => 
-                String.drop(1, line) |> processCommand(zipper) |> zpr -> loop(ls, zpr)
-            case _ :: _ => processLsOutput(lines, zipper) |> match (ls, zpr) -> loop(ls, zpr)
-            case Nil    => goToRoot(zipper) |> fst
+            case line :: ls if startsWith({prefix = "$"}, line) => String.drop(1, line) |> processCommand(zipper) |> loop(ls)
+            case _ :: _                                         => processLsOutput(lines, zipper) ||> loop
+            case Nil                                            => goToRoot(zipper) |> fst
         };
         loop(drop(1, inputLines), (Directory("/", 0, Nil), Nil))
     
@@ -109,6 +110,6 @@ namespace Day7
         let totalSize = toSize(root);
         getDirSizes(root)
         |> sort
-        |> find(size -> size >= Int32.max(0, 30_000_000 - (70_000_000 - totalSize)))
+        |> find(size -> size >= totalSize - 40_000_000)
         |> Option.getWithDefault(0)
 }

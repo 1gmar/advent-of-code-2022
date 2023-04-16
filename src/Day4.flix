@@ -5,20 +5,22 @@ namespace Day4
     def parseRange(rangeStr: String): Option[Range] = match String.splitOn({substr = "-"}, rangeStr)
     {
         case x :: y :: Nil =>
-            use Option.flatMap;
-            let* low = Int32.parse(10, x) |> Result.toOption;
-            let* high = Int32.parse(10, y) |> Result.toOption;
-            Some({from = low, to = high})
+            forM(
+                low <- Int32.parse(10, x) |> Result.toOption;
+                high <- Int32.parse(10, y) |> Result.toOption
+            )
+            yield {from = low, to = high}
         case _             => None
     }
     
     def toAssignmentPair(inputLine: String): Option[(Range, Range)] = match String.splitOn({substr = ","}, inputLine)
     {
         case x :: y :: Nil =>
-            use Option.flatMap;
-            let* range1 = parseRange(x);
-            let* range2 = parseRange(y);
-            Some((range1, range2))
+            forM(
+                range1 <- parseRange(x);
+                range2 <- parseRange(y)
+            )
+            yield (range1, range2)
         case _             => None
     }
 
@@ -30,7 +32,7 @@ namespace Day4
     
     def overlappingRanges(pair: (Range, Range)): Bool =
         let (range1, range2) = pair;
-        not (range1.to < range2.from or range1.from > range2.to)
+        range1.to >= range2.from and range1.from <= range2.to
 
     pub def solutionPart1(input: String): Int32 =
         input

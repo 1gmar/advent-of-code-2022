@@ -1,40 +1,43 @@
-sealed class Score[a]
-{
-    pub def score(it: a): Int32
-}
-
-enum Outcome
-{
-    case Win, Loss, Draw
-}
-
-enum Shape with Eq, Order, ToString, Boxable
-{
-    case Rock, Paper, Scissors
-}
-
-instance Score[Shape]
-{
-    pub def score(shape: Shape): Int32 = match shape
-    {
-        case Rock     => 1
-        case Paper    => 2
-        case Scissors => 3
-    }
-}
-
-instance Score[Outcome]
-{   
-    pub def score(outcome: Outcome): Int32 = match outcome
-    {
-        case Win  => 6
-        case Loss => 0
-        case Draw => 3
-    }
-}
-
 namespace Day2
 {
+    use Outcome.{Win, Loss, Draw}
+    use Shape.{Rock, Paper, Scissors}
+
+    sealed class Score[a]
+    {
+        pub def score(it: a): Int32
+    }
+
+    enum Outcome
+    {
+        case Win, Loss, Draw
+    }
+
+    enum Shape with Eq, Order, ToString, Boxable
+    {
+        case Rock, Paper, Scissors
+    }
+
+    instance Score[Shape]
+    {
+        pub def score(shape: Shape): Int32 = match shape
+        {
+            case Rock     => 1
+            case Paper    => 2
+            case Scissors => 3
+        }
+    }
+
+    instance Score[Outcome]
+    {   
+        pub def score(outcome: Outcome): Int32 = match outcome
+        {
+            case Win  => 6
+            case Loss => 0
+            case Draw => 3
+        }
+    }
+
     def gameRules(): #{Win(Shape, Shape), Loss(Shape, Shape), Draw(Shape, Shape)} = #{
         Win(Rock, Scissors).
         Win(Scissors, Paper).
@@ -70,20 +73,22 @@ namespace Day2
     def parseRound(row: String): Option[(Shape, Shape)] = match String.splitOn({substr = " "}, row)
     {
         case opponentShapeStr :: shapeStr :: Nil => 
-            use Option.flatMap;
-            let* opponentShape = parseOpponentShape(String.charAt(0, opponentShapeStr));
-            let* shape = parseShape(String.charAt(0, shapeStr));
-            Some((opponentShape, shape))
+            forM(
+                opponentShape <- parseOpponentShape(String.charAt(0, opponentShapeStr));
+                shape <- parseShape(String.charAt(0, shapeStr))
+            )
+            yield (opponentShape, shape)
         case _                                   => None
     }
 
     def parseStrat(row: String): Option[(Shape, Outcome)] = match String.splitOn({substr = " "}, row)
     {
         case opponentShapeStr :: outcomeStr :: Nil => 
-            use Option.flatMap;
-            let* opponentShape = parseOpponentShape(String.charAt(0, opponentShapeStr));
-            let* shape = parseOutcome(String.charAt(0, outcomeStr));
-            Some((opponentShape, shape))
+            forM(
+                opponentShape <- parseOpponentShape(String.charAt(0, opponentShapeStr));
+                shape <- parseOutcome(String.charAt(0, outcomeStr))
+            )
+            yield (opponentShape, shape)
         case _                                     => None
     }
 

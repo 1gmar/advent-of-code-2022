@@ -14,23 +14,26 @@ namespace Day5
         List.foldRight(updateCrateStacks(crateLine), crateStacks, stackIdsAndIndices)
 
     def parseCrateStacks(stacksInput: String): Option[CrateStacks] =
-        use Option.flatMap;
         let stackLines = String.lines(stacksInput);
-        let* crateStackLines = List.init(stackLines);
-        let* stackIdsLine = List.last(stackLines);
-        let* stackIds = String.words(stackIdsLine) |> List.traverse(Int32.parse(10) >> Result.toOption);
-        let stackIdIndices = stackIdsLine |> String.findIndices(Char.isDigit);
-        List.foldRight(collectCrateStacks(stackIds `List.zip` stackIdIndices), List.toMapWith(_ -> Nil, stackIds), crateStackLines)
-        |> Some
+        forM(
+            crateStackLines <- List.init(stackLines);
+            stackIdsLine <- List.last(stackLines);
+            stackIds <- String.words(stackIdsLine) |> List.traverse(Int32.parse(10) >> Result.toOption)
+        )
+        yield (
+            let stackIdIndices = stackIdsLine |> String.findIndices(Char.isDigit);
+            List.foldRight(collectCrateStacks(stackIds `List.zip` stackIdIndices), List.toMapWith(_ -> Nil, stackIds), crateStackLines)
+        )
 
     def toMoveInstruction(tokens: List[String]): Option[MoveInstruction] = match tokens
     {
         case moveStr :: fromStr :: toStr :: Nil =>
-            use Option.flatMap;
-            let* moveInt = Int32.parse(10, moveStr) |> Result.toOption;
-            let* fromInt = Int32.parse(10, fromStr) |> Result.toOption;
-            let* toInt = Int32.parse(10, toStr) |> Result.toOption;
-            Some({move = moveInt, from = fromInt, to = toInt})
+            forM(
+                moveInt <- Int32.parse(10, moveStr) |> Result.toOption;
+                fromInt <- Int32.parse(10, fromStr) |> Result.toOption;
+                toInt <- Int32.parse(10, toStr) |> Result.toOption
+            )
+            yield {move = moveInt, from = fromInt, to = toInt}
         case _                                  => None
     }
 

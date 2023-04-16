@@ -1,5 +1,6 @@
 namespace Day1
 {
+    use Comparison.{GreaterThan, LessThan, EqualTo}
     def readCaloryLines(input: String): List[List[String]] =
         input
         |> String.splitOn({substr = "\n\n"})
